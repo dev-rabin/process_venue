@@ -1,7 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-
 import type { FetchTaskResponse } from "@/types/taskResponseType";
 import { api } from "@/services/api";
+import { cacheService } from "../cache/cacheService";
+import { AppDispatch } from "..";
+import { setAllTasks } from "./taskSlice";
 
 export interface FetchTasksParams {
     page: number;
@@ -22,6 +24,7 @@ export const fetchTasks = createAsyncThunk<
             const response = await api.get<FetchTaskResponse>("/tasks", {
                 params,
             });
+            cacheService.saveTasks(response.data.items)
             return response.data;
         } catch (error: any) {
             return rejectWithValue(
@@ -30,3 +33,11 @@ export const fetchTasks = createAsyncThunk<
         }
     }
 );
+
+export const loadCachedTasks =
+    () => (dispatch: AppDispatch) => {
+        const tasks = cacheService.getTasks();
+        if (tasks.length > 0) {
+            dispatch(setAllTasks(tasks));
+        }
+    };

@@ -12,7 +12,7 @@ import {
   selectStatusFilter,
   selectTypeFilter,
 } from "@/store/tasks/taskSelector";
-import { fetchTasks } from "@/store/tasks/taskThunks";
+import { fetchTasks, loadCachedTasks } from "@/store/tasks/taskThunks";
 import { useEffect } from "react";
 
 export default function Home() {
@@ -26,6 +26,7 @@ export default function Home() {
   const sortBy = useAppSelector(selectSortBy);
 
   useEffect(() => {
+    dispatch(loadCachedTasks());
     dispatch(
       fetchTasks({
         page,

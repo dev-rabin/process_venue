@@ -3,6 +3,7 @@ import TaskPagination from "./TaskPagination";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   selectCurrentPage,
+  selectLoading,
   selectPageSize,
   selectSearch,
   selectSelectedTaskId,
@@ -20,6 +21,7 @@ import { formatDate } from "@/utils/date";
 
 export const TaskList = () => {
   const dispatch = useAppDispatch();
+  const loading = useAppSelector(selectLoading);
   const tasks = useAppSelector(selectVisibleTasks);
   const selectedTaskId = useAppSelector(selectSelectedTaskId);
   const totalTasks = useAppSelector(selectTotalTasks);
@@ -40,7 +42,11 @@ export const TaskList = () => {
         </div>
 
         <div className="flex-1 overflow-y-auto">
-          {tasks.length === 0 ? (
+          {loading ? (
+            <div className="flex items-center justify-center py-16">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-indigo-600" />
+            </div>
+          ) : tasks.length === 0 ? (
             <div className="py-10 text-center text-sm text-slate-500">
               No tasks found.
             </div>
