@@ -4,6 +4,7 @@ import {
 } from "@reduxjs/toolkit";
 import { tasksAdapter } from "./taskAdapter";
 import { fetchTasks } from "./taskThunks";
+import { Assignee, Status } from "@/types/taskType";
 
 const initialState = tasksAdapter.getInitialState({
     loading: false,
@@ -54,6 +55,50 @@ const tasksSlice = createSlice({
         upsertTask: tasksAdapter.upsertOne,
         removeTask: tasksAdapter.removeOne,
         clearTasks: tasksAdapter.removeAll,
+
+        tasksUpdatedFromWebSocket(state, action: PayloadAction<{
+            id: string;
+            status: Status;
+            updatedAt: number;
+        }>
+        ) {
+            tasksAdapter.updateOne(state, {
+                id: action.payload.id,
+                changes: {
+                    status: action.payload.status,
+                    updatedAt: action.payload.updatedAt,
+                },
+            });
+        },
+
+        tasksAssignedFromWebSocket(state, action: PayloadAction<{
+            id: string;
+            assignee: Assignee | null;
+        }>
+        ) {
+            tasksAdapter.updateOne(state, {
+                id: action.payload.id,
+                changes: {
+                    assignee: action.payload.assignee,
+                },
+            });
+        },
+
+        annotationCreatedFromWebSocket(state, action: PayloadAction<{
+            taskId: string;
+            at: number;
+        }>
+        ) {
+            const task = state.entities[action.payload.taskId];
+            if (!task) return;
+            tasksAdapter.updateOne(state, {
+                id: action.payload.taskId,
+                changes: {
+                    annotationCount: Number(task.annotationCount) + 1,
+                    updatedAt: action.payload.at,
+                },
+            });
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchTasks.pending, (state) => {
@@ -88,6 +133,9 @@ export const {
     upsertTask,
     removeTask,
     clearTasks,
+    tasksUpdatedFromWebSocket,
+    tasksAssignedFromWebSocket,
+    annotationCreatedFromWebSocket,
 } = tasksSlice.actions;
 
 export default tasksSlice.reducer;

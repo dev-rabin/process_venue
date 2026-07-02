@@ -97,6 +97,7 @@ app.get("/api/tasks/:id/summary", (req, res) => {
   }, 400);
   req.on("close", () => clearInterval(timer));
 });
+
 // WebSocket: emits a live event roughly every 2s
 const wss = new WebSocketServer({ server, path: "/ws" });
 wss.on("connection", (ws) => {
@@ -136,6 +137,7 @@ wss.on("connection", (ws) => {
   }, 2000);
   ws.on("close", () => clearInterval(timer));
 });
+
 server.listen(4000, () =>
   console.log("mock on http://localhost:4000 (ws://localhost:4000/ws)"),
 );

@@ -1,3 +1,4 @@
+import WebSocketProvider from "@/components/WebsocketProvider";
 import "./globals.css";
 import Providers from "./provider";
 
@@ -9,7 +10,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <WebSocketProvider>{children}</WebSocketProvider>
+        </Providers>
       </body>
     </html>
   );
