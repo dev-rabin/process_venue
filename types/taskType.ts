@@ -1,20 +1,3 @@
-export type TaskStatus =
-    | "in_progress"
-    | "done"
-    | "todo"
-    | "qa"
-    | "blocked";
-
-export type TaskType =
-    | "image"
-    | "audio"
-    | "text"
-    | "video";
-
-export type SortBy =
-    | "updatedAt"
-    | "title"
-    | "status";
 
 export interface Assignee {
     id: string;
@@ -26,13 +9,22 @@ export interface TaskMeta {
     note?: string;
 }
 
-export interface Task {
+export interface Tasks {
     id: string;
     title: string;
-    type: TaskType;
-    status: TaskStatus;
+    type: string;
+    status: Status;
     assignee: Assignee | null;
-    annotationCount: number;
-    updatedAt: string;
+    annotationCount: number | string;
+    updatedAt: number | string;
     meta: TaskMeta;
 }
+
+export interface FetchTaskResponse {
+    page: number;
+    pageSize: number;
+    total: number;
+    items: Tasks[];
+}
+
+export type Status = "In Progress" | "Done" | "Blocked" | "Todo" | "QA";

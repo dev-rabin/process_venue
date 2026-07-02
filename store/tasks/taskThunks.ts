@@ -6,7 +6,12 @@ import { api } from "@/services/api";
 export interface FetchTasksParams {
     page: number;
     pageSize: number;
+    search: string;
+    status: string;
+    type: string;
+    sortBy: string;
 }
+
 export const fetchTasks = createAsyncThunk<
     FetchTaskResponse,
     FetchTasksParams

@@ -27,23 +27,27 @@ const tasksSlice = createSlice({
         },
         setSearch(state, action: PayloadAction<string>) {
             state.search = action.payload;
+            state.page = 1;
         },
         setStatusFilter(state, action: PayloadAction<string>) {
             state.statusFilter = action.payload;
+            state.page = 1;
         },
         setTypeFilter(state, action: PayloadAction<string>) {
             state.typeFilter = action.payload;
+            state.page = 1;
         },
         setSortBy(state, action: PayloadAction<string>) {
             state.sortBy = action.payload;
+            state.page = 1;
         },
         setPage(state, action: PayloadAction<number>) {
             state.page = action.payload;
         },
         setPageSize(state, action: PayloadAction<number>) {
             state.pageSize = action.payload;
+            state.page = 1;
         },
-
         setAllTasks: tasksAdapter.setAll,
         addTask: tasksAdapter.addOne,
         updateTask: tasksAdapter.updateOne,
