@@ -15,16 +15,18 @@ import {
 import { fetchTasks, loadCachedTasks } from "@/store/tasks/taskThunks";
 import { useEffect } from "react";
 
+
+
 export default function Home() {
   const dispatch = useAppDispatch();
   const page = useAppSelector(selectCurrentPage);
   const pageSize = useAppSelector(selectPageSize);
-
+  
   const search = useAppSelector(selectSearch);
   const statusFilter = useAppSelector(selectStatusFilter);
   const typeFilter = useAppSelector(selectTypeFilter);
   const sortBy = useAppSelector(selectSortBy);
-
+  
   useEffect(() => {
     dispatch(loadCachedTasks());
     dispatch(
@@ -38,7 +40,7 @@ export default function Home() {
       }),
     );
   }, [dispatch, page, pageSize, search, statusFilter, typeFilter, sortBy]);
-
+  
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Header />
@@ -52,3 +54,10 @@ export default function Home() {
     </div>
   );
 }
+
+
+// import { TaskTicker } from "@/buggy/taskTicker";
+// export default function HomePage() {
+  //   return <TaskTicker apiBase="http://localhost:4000/api" />;
+  // }
+  
