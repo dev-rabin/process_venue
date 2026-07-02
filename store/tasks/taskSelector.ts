@@ -48,8 +48,7 @@ export const selectVisibleTasks = createSelector(
             filteredTasks = filteredTasks.filter((task) => {
                 if (statusFilter === "in_progress") {
                     return (
-                        task.status === "InProgress" ||
-                        task.status === "in_progress"
+                        task.status === "InProgress" || task.status === "in_progress"
                     );
                 }
                 return task.status === statusFilter;
