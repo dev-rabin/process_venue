@@ -42,9 +42,11 @@ export default function Home() {
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Header />
       <FilterBar />
-      <div className="grid grid-cols-1 lg:grid-cols-[420px_1fr] gap-2 p-3">
+      <div className="grid grid-cols-1 gap-4 p-3 lg:grid-cols-[420px_1fr]">
         <TaskList />
-        <TaskInfo />
+        <div className="sticky top-3 self-start">
+          <TaskInfo />
+        </div>
       </div>
     </div>
   );

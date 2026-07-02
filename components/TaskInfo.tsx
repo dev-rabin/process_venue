@@ -28,7 +28,7 @@ export default function TaskInfo() {
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
         <div className="mb-6 flex items-center justify-between border-b border-slate-100 pb-4">
           <h2 className="text-3xl font-bold text-slate-900">{task.title}</h2>
@@ -85,12 +85,16 @@ export default function TaskInfo() {
             <FieldRow
               icon={<FileText className="h-4 w-4 text-slate-500" />}
               label="Meta"
-              value="Note: rush"
+              value={
+                task.meta
+                  ? `${task.meta.priority ?? "-"} • ${task.meta.note ?? "-"}`
+                  : "-"
+              }
             />
           </div>
         </div>
       </div>
-      <TaskSummary />
+      <TaskSummary taskId={task.id} />
     </div>
   );
 }

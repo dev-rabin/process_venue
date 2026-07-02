@@ -1,4 +1,4 @@
-import { Task } from "@/types/taskType";
+import { Tasks } from "@/types/taskType";
 import { createEntityAdapter } from "@reduxjs/toolkit";
 
-export const tasksAdapter = createEntityAdapter<Task>();
+export const tasksAdapter = createEntityAdapter<Tasks>();
