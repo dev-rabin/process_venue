@@ -17,6 +17,7 @@ const initialState = tasksAdapter.getInitialState({
     statusFilter: "all",
     typeFilter: "all",
     sortBy: "updated",
+    dataSource: "network" as "cache" | "network",
 });
 
 const tasksSlice = createSlice({
@@ -55,6 +56,12 @@ const tasksSlice = createSlice({
         upsertTask: tasksAdapter.upsertOne,
         removeTask: tasksAdapter.removeOne,
         clearTasks: tasksAdapter.removeAll,
+        setDataSource(
+            state,
+            action: PayloadAction<"cache" | "network">
+        ) {
+            state.dataSource = action.payload;
+        },
 
         tasksUpdatedFromWebSocket(state, action: PayloadAction<{
             id: string;
@@ -133,6 +140,7 @@ export const {
     upsertTask,
     removeTask,
     clearTasks,
+    setDataSource,
     tasksUpdatedFromWebSocket,
     tasksAssignedFromWebSocket,
     annotationCreatedFromWebSocket,

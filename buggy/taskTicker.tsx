@@ -13,33 +13,42 @@ export function TaskTicker({ apiBase }: { apiBase: string }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [tick, setTick] = useState(0);
 
-  // (A) Keep a running clock for "x seconds ago"
+  // (A) Keep updating time every second
   useEffect(() => {
     const id = setInterval(() => {
-      // FIX 1: Use functional update to avoid stale closure.
+      // FIX 1:
+      // Old code always used the old value of tick.
+      // Functional update always gets the latest value.
       setTick((prev) => prev + 1);
     }, 1000);
 
     return () => clearInterval(id);
   }, []);
 
-  // (B) Refetch whenever selection changes
+  // (B) Fetch task when a task is selected
   useEffect(() => {
-    // FIX 2: Prevent unnecessary API call on initial render.
+    // FIX 2:
+    // Don't call the API if no task is selected.
     if (!selectedId) return;
+
     fetch(`${apiBase}/api/tasks/${selectedId}`)
       .then((r) => r.json())
       .then((t) => {
-        // FIX 3: Never mutate React state.
-        // push() mutates the existing array, so create a new one instead.
+        // FIX 3:
+        // Don't change the existing array.
+        // Create a new array instead.
         setTasks((prev) => [...prev, t]);
       });
-    // FIX 4: Include all external dependencies used inside the effect.
+
+    // FIX 4:
+    // Add apiBase because it is used inside this effect.
   }, [apiBase, selectedId]);
 
-  // (C) Newest first
-  // FIX 5: sort() mutates the original array.
-  // Copy the array before sorting and memoize the result.
+  // (C) Show newest task first
+
+  // FIX 5:
+  // sort() changes the original array.
+  // Copy the array first, then sort it.
   const sorted = useMemo(() => {
     return [...tasks].sort((a, b) => b.updatedAt - a.updatedAt);
   }, [tasks]);
@@ -47,7 +56,9 @@ export function TaskTicker({ apiBase }: { apiBase: string }) {
   return (
     <ul>
       {sorted.map((t) => (
-        // FIX 6: Use a stable key instead of array index.
+        // FIX 6:
+        // Use task id as the key.
+        // Don't use array index because it can change.
         <li key={t.id} onClick={() => setSelectedId(t.id)}>
           {t.title} (updated {Math.floor((Date.now() - t.updatedAt) / 1000)}s
           ago)

@@ -1,26 +1,24 @@
+import localforage from "localforage";
 import { Tasks } from "@/types/taskType";
 
 const TASKS_CACHE_KEY = "tasks-cache";
 
 class CacheService {
-    saveTasks(tasks: Tasks[]) {
-        localStorage.setItem(TASKS_CACHE_KEY, JSON.stringify(tasks));
+    async saveTasks(tasks: Tasks[]) {
+        await localforage.setItem(TASKS_CACHE_KEY, tasks);
     }
 
-    getTasks(): Tasks[] {
-        const data = localStorage.getItem(TASKS_CACHE_KEY);
-        if (!data) {
-            return [];
-        }
+    async getTasks(): Promise<Tasks[]> {
         try {
             console.log("Loading tasks from cache");
-            return JSON.parse(data) as Tasks[];
+            const tasks = await localforage.getItem<Tasks[]>(TASKS_CACHE_KEY);
+            return tasks ?? [];
         } catch {
             return [];
         }
     }
-    clearTasks() {
-        localStorage.removeItem(TASKS_CACHE_KEY);
+    async clearTasks() {
+        await localforage.removeItem(TASKS_CACHE_KEY);
     }
 }
 

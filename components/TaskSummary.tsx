@@ -47,7 +47,7 @@ export default function TaskSummary({ taskId }: TaskSummaryProps) {
         <button
           disabled={isStreaming}
           onClick={() => summaryService.start(taskId, dispatch)}
-          className="flex items-center gap-2 rounded-full bg-black px-3 py-2 text-xs font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex items-center gap-2 rounded-full bg-black px-3 py-2 text-xs font-medium text-white disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
         >
           {isStreaming && <Loader2 className="h-3 w-3 animate-spin" />}
           {isStreaming ? "Generating..." : "Generate Summary"}

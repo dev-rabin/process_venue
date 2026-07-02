@@ -3,7 +3,7 @@ import type { FetchTaskResponse } from "@/types/taskResponseType";
 import { api } from "@/services/api";
 import { cacheService } from "../cache/cacheService";
 import { AppDispatch } from "..";
-import { setAllTasks } from "./taskSlice";
+import { setAllTasks, setDataSource } from "./taskSlice";
 
 export interface FetchTasksParams {
     page: number;
@@ -19,15 +19,16 @@ export const fetchTasks = createAsyncThunk<
     FetchTasksParams
 >(
     "tasks/fetchTasks",
-    async (params, { rejectWithValue }) => {
+    async (params, thunkAPI) => {
         try {
             const response = await api.get<FetchTaskResponse>("/tasks", {
                 params,
             });
-            cacheService.saveTasks(response.data.items)
+            await cacheService.saveTasks(response.data.items);
+            thunkAPI.dispatch(setDataSource("network"));
             return response.data;
         } catch (error: any) {
-            return rejectWithValue(
+            return thunkAPI.rejectWithValue(
                 error.response?.data?.message ?? "Failed to fetch tasks"
             );
         }
@@ -35,9 +36,11 @@ export const fetchTasks = createAsyncThunk<
 );
 
 export const loadCachedTasks =
-    () => (dispatch: AppDispatch) => {
-        const tasks = cacheService.getTasks();
+    () => async (dispatch: AppDispatch) => {
+        const tasks = await cacheService.getTasks();
+
         if (tasks.length > 0) {
             dispatch(setAllTasks(tasks));
+            dispatch(setDataSource("cache"));
         }
     };
